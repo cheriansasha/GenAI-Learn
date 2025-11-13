@@ -1,12 +1,18 @@
-import openai
+# To run this script:
+# 1. pip install -r requirements.txt
+# 2. set GROQ_API_KEY=your_actual_groq_api_key_here
+# 3. python chat_ai.py
 
-# Set your OpenAI API key (get free credits at openai.com)
-openai.api_key = "your_openai_api_key_here"
+from groq import Groq
+import os
+
+# Initialize Groq client with API key from environment variable
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def ask_ai(question):
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # Cheapest model
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
             messages=[{"role": "user", "content": question}],
             max_tokens=150
         )
