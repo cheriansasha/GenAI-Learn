@@ -1,10 +1,11 @@
 # To run this script:
 # 1. pip install -r requirements.txt
-# 2. set NEWS_API_KEY=your_news_api_key_here
-# 3. python news.py
+# 2. python news.py
 
 import requests
 import os
+import json
+from secrets import get_secret
 
 def is_url_valid(url):
     try:
@@ -14,7 +15,12 @@ def is_url_valid(url):
         return False
 
 def get_top_articles():
-    api_key = os.getenv("NEWS_API_KEY")
+    try:
+        secret_data = json.loads(get_secret())
+        api_key = secret_data.get("news_api_key")
+    except:
+        api_key = None
+    
     if not api_key:
         return []
     

@@ -1,16 +1,23 @@
 # To run this script:
 # 1. pip install -r requirements.txt
-# 2. set GROQ_API_KEY=your_actual_groq_api_key_here
-# 3. python chat_ai.py
+# 2. python chat_ai.py
 
 from groq import Groq
 from news import get_top_articles
 import os
 import requests
 from bs4 import BeautifulSoup
+from secrets import get_secret
+import json
 
-# Initialize Groq client with API key from environment variable
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+# Initialize Groq client with API key from AWS Secrets Manager
+try:
+    secret_data = json.loads(get_secret())
+    groq_api_key = secret_data.get("groq_api_key")
+except:
+    groq_api_key = None
+
+client = Groq(api_key=groq_api_key)
 
 def ask_ai(news_url):
     try:
