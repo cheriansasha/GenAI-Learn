@@ -13,10 +13,10 @@ def is_url_valid(url):
     except:
         return False
 
-def get_top_headlines():
+def get_top_articles():
     api_key = os.getenv("NEWS_API_KEY")
     if not api_key:
-        return "Error: NEWS_API_KEY environment variable not set"
+        return []
     
     url = f"https://newsapi.org/v2/top-headlines?country=us&pageSize=5&apiKey={api_key}"
     
@@ -26,18 +26,16 @@ def get_top_headlines():
         
         if data["status"] == "ok":
             valid_urls = []
-            count = 1
             for article in data["articles"]:
                 if is_url_valid(article['url']):
-                    valid_urls.append(f"{count}. {article['url']}")
-                    count += 1
-            return "\n".join(valid_urls) if valid_urls else "No valid URLs found"
+                    valid_urls.append(article['url'])
+            return valid_urls
         else:
-            return f"Error: {data.get('message', 'Unknown error')}"
+            return []
     except Exception as e:
-        return f"Error: {e}"
+        return []
 
-if __name__ == "__main__":
-    print("Top 5 Article URLs Today:")
-    print("=" * 40)
-    print(get_top_headlines())
+# if __name__ == "__main__":
+#     print("Top 5 Article URLs Today:")
+#     print("=" * 40)
+#     print(get_top_headlines())
