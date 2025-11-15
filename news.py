@@ -1,13 +1,11 @@
-# To run this script:
-# 1. pip install -r requirements.txt
-# 2. python news.py
+"""News API module for fetching top article URLs."""
 
 import requests
-import os
 import json
 from secrets import get_secret
 
 def is_url_valid(url):
+    """Check if URL is accessible."""
     try:
         response = requests.head(url, timeout=5)
         return response.status_code == 200
@@ -15,6 +13,7 @@ def is_url_valid(url):
         return False
 
 def get_top_articles():
+    """Fetch top 5 US news article URLs from NewsAPI."""
     try:
         secret_data = json.loads(get_secret())
         api_key = secret_data.get("news_api_key")
@@ -40,8 +39,3 @@ def get_top_articles():
             return []
     except Exception as e:
         return []
-
-# if __name__ == "__main__":
-#     print("Top 5 Article URLs Today:")
-#     print("=" * 40)
-#     print(get_top_headlines())
